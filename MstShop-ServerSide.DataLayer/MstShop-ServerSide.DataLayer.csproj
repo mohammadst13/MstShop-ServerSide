@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>MstShop_ServerSide.DataLayer</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DocumentFormat.OpenXml" Version="2.12.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>
