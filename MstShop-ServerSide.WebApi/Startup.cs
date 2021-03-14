@@ -6,7 +6,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using MstShop_ServerSide.Core.Services.Implementations;
+using MstShop_ServerSide.Core.Services.Interfaces;
 using MstShop_ServerSide.Core.Utilities.Extensions.Connection;
+using MstShop_ServerSide.DataLayer.Repository;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -37,6 +40,19 @@ namespace MstShop_ServerSide.WebApi
                     .Build()
             );
 
+            #region Add DbContext
+
+            services.AddApplicationDbContext(Configuration);
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+            #endregion
+
+            #region Application Services
+
+            services.AddScoped<IUserService, UserService>();
+
+            #endregion
+
             services.AddApplicationDbContext(Configuration);
 
             services.AddControllers();
@@ -60,6 +76,7 @@ namespace MstShop_ServerSide.WebApi
             {
                 endpoints.MapControllers();
             });
+
         }
     }
 }
