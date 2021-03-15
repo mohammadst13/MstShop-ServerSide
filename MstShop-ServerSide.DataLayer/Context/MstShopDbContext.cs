@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MstShop_ServerSide.DataLayer.Entities.Access;
 using MstShop_ServerSide.DataLayer.Entities.Account;
+using MstShop_ServerSide.DataLayer.Entities.Product;
+using MstShop_ServerSide.DataLayer.Entities.Site;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +28,18 @@ namespace MstShop_ServerSide.DataLayer.Context
         public DbSet<Role> Roles { get; set; }
 
         public DbSet<UserRole> UserRoles { get; set; }
+
+        public DbSet<Slider> Sliders { get; set; }
+
+        public DbSet<Product> Products { get; set; }
+
+        public DbSet<ProductCategory> ProductCategories { get; set; }
+
+        public DbSet<ProductGallery> ProductGalleries { get; set; }
+
+        public DbSet<ProductSelectedCategory> ProductSelectedCategories { get; set; }
+
+        public DbSet<ProductVisit> ProductVisits { get; set; }
 
         #endregion
 
