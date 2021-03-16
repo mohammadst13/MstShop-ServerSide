@@ -19,8 +19,5 @@
     <ProjectReference Include="..\MstShop-ServerSide.Core\MstShop-ServerSide.Core.csproj" />
     <ProjectReference Include="..\MstShop-ServerSide.DataLayer\MstShop-ServerSide.DataLayer.csproj" />
   </ItemGroup>
-	<ItemGroup>
-		<Folder Include="wwwroot\images\sliders\origin\" />
-	</ItemGroup>
 
 </Project>
