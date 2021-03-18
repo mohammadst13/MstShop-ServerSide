@@ -13,13 +13,11 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace MstShop_ServerSide.WebApi.Controllers
 {
-    public class AccountController : ControllerBase
+    public class AccountController : SiteBaseController
     {
         #region costructor
 
         private IUserService userService;
-
-        public object RegisterUserResult { get; private set; }
 
         public AccountController(IUserService userService)
         {
@@ -37,11 +35,11 @@ namespace MstShop_ServerSide.WebApi.Controllers
             {
                 var res = await userService.RegisterUser(register);
 
-                //switch (res)
-                //{
-                //    case RegisterUserResult.EmailExists:
-                //        return JsonResponseStatus.Error(new { status = "EmailExist" });
-                //}
+                switch (res)
+                {
+                    case RegisterUserResult.EmailExists:
+                        return JsonResponseStatus.Error(new { info = "EmailExist" });
+                }
             }
 
             return JsonResponseStatus.Success();
@@ -68,10 +66,10 @@ namespace MstShop_ServerSide.WebApi.Controllers
 
                     case LoginUserResult.Success:
                         var user = await userService.GetUserByEmail(login.Email);
-                        var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MohammadSTEshopJwtBearer"));
+                        var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("AngularEshopJwtBearer"));
                         var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
                         var tokenOptions = new JwtSecurityToken(
-                            issuer: "https://localhost:44318",
+                            issuer: "https://localhost:44381",
                             claims: new List<Claim>
                             {
                                 new Claim(ClaimTypes.Name, user.Email),

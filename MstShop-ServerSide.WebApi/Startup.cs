@@ -80,17 +80,12 @@ namespace MstShop_ServerSide.WebApi
 
             #region CORS
 
-            services.AddCors(options =>
+            services.AddCors(Options => Options.AddPolicy("Cors", builder =>
             {
-                options.AddPolicy("EnableCors", builder =>
-                {
-                    builder.AllowAnyOrigin()
-                        .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowCredentials()
-                        .Build();
-                });
-            });
+                builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            }));
 
             #endregion
 
@@ -111,7 +106,7 @@ namespace MstShop_ServerSide.WebApi
 
             app.UseStaticFiles();
 
-            app.UseCors("EnableCors");
+            app.UseCors("Cors");
             app.UseAuthentication();
 
             app.UseRouting();
