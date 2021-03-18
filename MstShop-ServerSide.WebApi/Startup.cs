@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -6,6 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
+using MstShop_ServerSide.Core.Security;
 using MstShop_ServerSide.Core.Services.Implementations;
 using MstShop_ServerSide.Core.Services.Interfaces;
 using MstShop_ServerSide.Core.Utilities.Extensions.Connection;
@@ -14,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace MstShop_ServerSide.WebApi
@@ -52,6 +56,41 @@ namespace MstShop_ServerSide.WebApi
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ISliderService, SliderService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IPasswordHelper, PasswordHelper>();
+
+            #endregion
+
+            #region Authentication
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = "https://localhost:44318",
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MohammadSTEshopJwtBearer"))
+                    };
+                });
+
+            #endregion
+
+            #region CORS
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("EnableCors", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials()
+                        .Build();
+                });
+            });
 
             #endregion
 
@@ -71,6 +110,9 @@ namespace MstShop_ServerSide.WebApi
             app.UseHttpsRedirection();
 
             app.UseStaticFiles();
+
+            app.UseCors("EnableCors");
+            app.UseAuthentication();
 
             app.UseRouting();
 
