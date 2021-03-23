@@ -10,6 +10,7 @@ using MstShop_ServerSide.Core.Utilities.Common;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using MstShop_ServerSide.Core.Utilities.Extensions.Identity;
 
 namespace MstShop_ServerSide.WebApi.Controllers
 {
@@ -66,7 +67,7 @@ namespace MstShop_ServerSide.WebApi.Controllers
 
                     case LoginUserResult.Success:
                         var user = await userService.GetUserByEmail(login.Email);
-                        var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("AngularEshopJwtBearer"));
+                        var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MohammadSTEshopJwtBearer"));
                         var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
                         var tokenOptions = new JwtSecurityToken(
                             issuer: "https://localhost:44381",
@@ -98,9 +99,32 @@ namespace MstShop_ServerSide.WebApi.Controllers
 
         #endregion
 
+        #region Check User Authentication
+
+        [HttpPost("check-auth")]
+        public async Task<IActionResult> CheckUserAuth()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = await userService.GetUserByUserId(User.GetUserId());
+                return JsonResponseStatus.Success(new
+                {
+                    userId = user.Id,
+                    firstName = user.FirstName,
+                    lastName = user.LastName,
+                    address = user.Address,
+                    email = user.Email,
+                });
+            }
+
+            return JsonResponseStatus.Error();
+        }
+
+        #endregion
+
         #region Sign Out
 
-        [HttpGet("sing-out")]
+        [HttpGet("sign-out")]
         public async Task<IActionResult> LogOut()
         {
             if (User.Identity.IsAuthenticated)

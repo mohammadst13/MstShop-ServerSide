@@ -80,6 +80,11 @@ namespace MstShop_ServerSide.Core.Services.Implementations
             return await userRepository.GetEntitiesQuery().SingleOrDefaultAsync(s => s.Email == email.ToLower().Trim());
         }
 
+        public async Task<User> GetUserByUserId(long userId)
+        {
+            return await userRepository.GetEntityById(userId);
+        }
+
         #endregion
 
         #region dispose
