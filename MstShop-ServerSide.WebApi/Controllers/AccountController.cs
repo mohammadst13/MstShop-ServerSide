@@ -59,7 +59,7 @@ namespace MstShop_ServerSide.WebApi.Controllers
                 switch (res)
                 {
                     case LoginUserResult.IncorrectData:
-                        return JsonResponseStatus.NotFound();
+                        return JsonResponseStatus.NotFound(new { message = "کاربری با مشخصات وارد شده یافت نشد" });
 
                     case LoginUserResult.NotActivated:
                         return JsonResponseStatus.Error(new { message = "حساب کاربری شما فعال نشده است" });
@@ -81,7 +81,15 @@ namespace MstShop_ServerSide.WebApi.Controllers
 
                         var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
 
-                        return JsonResponseStatus.Success(new { token = tokenString, expireTime = 30, firstName = user.FirstName, lastName = user.LastName, userId = user.Id });
+                        return JsonResponseStatus.Success(new
+                        {
+                            token = tokenString,
+                            expireTime = 30,
+                            firstName = user.FirstName,
+                            lastName = user.LastName,
+                            userId = user.Id,
+                            address = user.Address
+                        });
                 }
             }
 
