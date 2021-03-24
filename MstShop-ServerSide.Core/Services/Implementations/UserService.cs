@@ -1,14 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using MstShop_ServerSide.Core.DTOs.Account;
 using MstShop_ServerSide.Core.Security;
 using MstShop_ServerSide.Core.Services.Interfaces;
+using MstShop_ServerSide.Core.Utilities.Convertors;
 using MstShop_ServerSide.DataLayer.Entities.Account;
 using MstShop_ServerSide.DataLayer.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace MstShop_ServerSide.Core.Services.Implementations
 {
@@ -18,11 +18,15 @@ namespace MstShop_ServerSide.Core.Services.Implementations
 
         private IGenericRepository<User> userRepository;
         private IPasswordHelper passwordHelper;
+        private IMailSender mailSender;
+        private IViewRenderService renderView;
 
-        public UserService(IGenericRepository<User> userRepository, IPasswordHelper passwordHelper)
+        public UserService(IGenericRepository<User> userRepository, IPasswordHelper passwordHelper, IMailSender mailSender, IViewRenderService renderView)
         {
             this.userRepository = userRepository;
             this.passwordHelper = passwordHelper;
+            this.mailSender = mailSender;
+            this.renderView = renderView;
         }
 
         #endregion
@@ -52,6 +56,10 @@ namespace MstShop_ServerSide.Core.Services.Implementations
             await userRepository.AddEntity(user);
 
             await userRepository.SaveChanges();
+
+            var body = await renderView.RenderToStringAsync("Email/ActivateAccount", user);
+
+            mailSender.Send("hadafpanel@gmail.com", "test", body);
 
             return RegisterUserResult.Success;
         }
@@ -85,6 +93,19 @@ namespace MstShop_ServerSide.Core.Services.Implementations
             return await userRepository.GetEntityById(userId);
         }
 
+        public void ActivateUser(User user)
+        {
+            user.IsActivated = true;
+            user.EmailActiveCode = Guid.NewGuid().ToString();
+            userRepository.UpdateEntity(user);
+            userRepository.SaveChanges();
+        }
+
+        public Task<User> GetUserByEmailActiveCode(string emailActiveCode)
+        {
+            return userRepository.GetEntitiesQuery().SingleOrDefaultAsync(s => s.EmailActiveCode == emailActiveCode);
+        }
+
         #endregion
 
         #region dispose
@@ -95,5 +116,6 @@ namespace MstShop_ServerSide.Core.Services.Implementations
         }
 
         #endregion
+
     }
 }
