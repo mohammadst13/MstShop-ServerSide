@@ -2,9 +2,9 @@
 using MstShop_ServerSide.DataLayer.Entities.Product;
 using System.Collections.Generic;
 
-namespace MstShop_ServerSide.Core.DTOs.Producs
+namespace MstShop_ServerSide.Core.DTOs.Products
 {
-    public class FilterProdcutsDTO : BasePaging
+    public class FilterProductsDTO : BasePaging
     {
         public string Title { get; set; }
 
@@ -14,7 +14,7 @@ namespace MstShop_ServerSide.Core.DTOs.Producs
 
         public List<Product> Products { get; set; }
 
-        public FilterProdcutsDTO SetPaging(BasePaging paging)
+        public FilterProductsDTO SetPaging(BasePaging paging)
         {
             this.PageId = paging.PageId;
             this.PageCount = paging.PageCount;
@@ -26,7 +26,7 @@ namespace MstShop_ServerSide.Core.DTOs.Producs
             return this;
         }
 
-        public FilterProdcutsDTO SetProducts(List<Product> products)
+        public FilterProductsDTO SetProducts(List<Product> products)
         {
             this.Products = products;
             return this;

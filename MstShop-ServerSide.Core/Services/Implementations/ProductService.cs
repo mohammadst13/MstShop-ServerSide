@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using MstShop_ServerSide.Core.DTOs.Paging;
-using MstShop_ServerSide.Core.DTOs.Producs;
+using MstShop_ServerSide.Core.DTOs.Products;
 using MstShop_ServerSide.Core.Services.Interfaces;
 using MstShop_ServerSide.Core.Utilities.Extensions.Paging;
 using MstShop_ServerSide.DataLayer.Entities.Product;
@@ -46,14 +46,17 @@ namespace AngularEshop.Core.Services.Implementations
             await productRepository.SaveChanges();
         }
 
-        public async Task<FilterProdcutsDTO> FilterProducts(FilterProdcutsDTO filter)
+        public async Task<FilterProductsDTO> FilterProducts(FilterProductsDTO filter)
         {
             var productsQuery = productRepository.GetEntitiesQuery().AsQueryable();
 
             if (!string.IsNullOrEmpty(filter.Title))
                 productsQuery = productsQuery.Where(s => s.ProductName.Contains(filter.Title));
 
-            productsQuery = productsQuery.Where(s => s.Price >= filter.StartPrice && s.Price <= filter.EndPrice);
+            productsQuery = productsQuery.Where(s => s.Price >= filter.StartPrice);
+
+            if (filter.EndPrice != 0)
+                productsQuery = productsQuery.Where(s => s.Price <= filter.EndPrice);
 
             var count = (int)Math.Ceiling(productsQuery.Count() / (double)filter.TakeEntity);
 
