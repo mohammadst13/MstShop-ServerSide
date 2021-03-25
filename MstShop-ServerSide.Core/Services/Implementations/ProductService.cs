@@ -1,16 +1,18 @@
-﻿using MstShop_ServerSide.Core.Services.Interfaces;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using MstShop_ServerSide.Core.DTOs.Paging;
+using MstShop_ServerSide.Core.DTOs.Producs;
+using MstShop_ServerSide.Core.Services.Interfaces;
+using MstShop_ServerSide.Core.Utilities.Extensions.Paging;
 using MstShop_ServerSide.DataLayer.Entities.Product;
 using MstShop_ServerSide.DataLayer.Repository;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
-namespace MstShop_ServerSide.Core.Services.Implementations
+namespace AngularEshop.Core.Services.Implementations
 {
     public class ProductService : IProductService
     {
-
         #region constructor
 
         private IGenericRepository<Product> productRepository;
@@ -44,8 +46,25 @@ namespace MstShop_ServerSide.Core.Services.Implementations
             await productRepository.SaveChanges();
         }
 
-        #endregion
+        public async Task<FilterProdcutsDTO> FilterProducts(FilterProdcutsDTO filter)
+        {
+            var productsQuery = productRepository.GetEntitiesQuery().AsQueryable();
 
+            if (!string.IsNullOrEmpty(filter.Title))
+                productsQuery = productsQuery.Where(s => s.ProductName.Contains(filter.Title));
+
+            productsQuery = productsQuery.Where(s => s.Price >= filter.StartPrice && s.Price <= filter.EndPrice);
+
+            var count = (int)Math.Ceiling(productsQuery.Count() / (double)filter.TakeEntity);
+
+            var pager = Pager.Build(count, filter.PageId, filter.TakeEntity);
+
+            var products = await productsQuery.Paging(pager).ToListAsync();
+
+            return filter.SetProducts(products).SetPaging(pager);
+        }
+
+        #endregion
 
         #region dispose
 

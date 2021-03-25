@@ -1,7 +1,6 @@
-﻿using MstShop_ServerSide.DataLayer.Entities.Product;
+﻿using MstShop_ServerSide.Core.DTOs.Producs;
+using MstShop_ServerSide.DataLayer.Entities.Product;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MstShop_ServerSide.Core.Services.Interfaces
@@ -12,7 +11,7 @@ namespace MstShop_ServerSide.Core.Services.Interfaces
 
         Task AddProduct(Product product);
         Task UpdateProduct(Product product);
-
+        Task<FilterProdcutsDTO> FilterProducts(FilterProdcutsDTO filter);
         #endregion
     }
 }

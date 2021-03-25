@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using MstShop_ServerSide.Core.DTOs.Account;
 using MstShop_ServerSide.Core.Security;
 using MstShop_ServerSide.Core.Services.Interfaces;
-using MstShop_ServerSide.Core.Utilities.Convertors;
+//using MstShop_ServerSide.Core.Utilities.Convertors;
 using MstShop_ServerSide.DataLayer.Entities.Account;
 using MstShop_ServerSide.DataLayer.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -18,15 +18,15 @@ namespace MstShop_ServerSide.Core.Services.Implementations
 
         private IGenericRepository<User> userRepository;
         private IPasswordHelper passwordHelper;
-        private IMailSender mailSender;
-        private IViewRenderService renderView;
+        //private IMailSender mailSender;
+        //private IViewRenderService renderView;
 
-        public UserService(IGenericRepository<User> userRepository, IPasswordHelper passwordHelper, IMailSender mailSender, IViewRenderService renderView)
+        public UserService(IGenericRepository<User> userRepository, IPasswordHelper passwordHelper/*, IMailSender mailSender, IViewRenderService renderView*/)
         {
             this.userRepository = userRepository;
             this.passwordHelper = passwordHelper;
-            this.mailSender = mailSender;
-            this.renderView = renderView;
+            //this.mailSender = mailSender;
+            //this.renderView = renderView;
         }
 
         #endregion
@@ -57,9 +57,9 @@ namespace MstShop_ServerSide.Core.Services.Implementations
 
             await userRepository.SaveChanges();
 
-            var body = await renderView.RenderToStringAsync("Email/ActivateAccount", user);
+            //var body = await renderView.RenderToStringAsync("Email/ActivateAccount", user);
 
-            mailSender.Send("hadafpanel@gmail.com", "test", body);
+            //mailSender.Send("hadafpanel@gmail.com", "test", body);
 
             return RegisterUserResult.Success;
         }
