@@ -8,6 +8,7 @@ using MstShop_ServerSide.Core.Utilities.Extensions.Paging;
 using MstShop_ServerSide.DataLayer.Entities.Product;
 using MstShop_ServerSide.DataLayer.Repository;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace AngularEshop.Core.Services.Implementations
 {
@@ -65,6 +66,15 @@ namespace AngularEshop.Core.Services.Implementations
             var products = await productsQuery.Paging(pager).ToListAsync();
 
             return filter.SetProducts(products).SetPaging(pager);
+        }
+
+        #endregion
+
+        #region product categories
+
+        public async Task<List<ProductCategory>> GetAllActiveProductCategories()
+        {
+            return await productCategoryRepository.GetEntitiesQuery().Where(s => !s.IsDelete).ToListAsync();
         }
 
         #endregion
