@@ -14,6 +14,8 @@ namespace MstShop_ServerSide.Core.DTOs.Products
 
         public List<Product> Products { get; set; }
 
+        public List<long> Categories { get; set; }
+
         public FilterProductsDTO SetPaging(BasePaging paging)
         {
             this.PageId = paging.PageId;
