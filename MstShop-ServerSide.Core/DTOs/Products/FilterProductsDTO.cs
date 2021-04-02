@@ -16,6 +16,8 @@ namespace MstShop_ServerSide.Core.DTOs.Products
 
         public List<long> Categories { get; set; }
 
+        public ProductOrderBy? OrderBy { get; set; }
+
         public FilterProductsDTO SetPaging(BasePaging paging)
         {
             this.PageId = paging.PageId;
@@ -33,5 +35,11 @@ namespace MstShop_ServerSide.Core.DTOs.Products
             this.Products = products;
             return this;
         }
+    }
+
+    public enum ProductOrderBy
+    {
+        PriceAsc,
+        PriceDec
     }
 }
