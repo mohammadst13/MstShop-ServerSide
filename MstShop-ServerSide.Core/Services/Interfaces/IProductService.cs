@@ -14,6 +14,7 @@ namespace MstShop_ServerSide.Core.Services.Interfaces
         Task UpdateProduct(Product product);
         Task<FilterProductsDTO> FilterProducts(FilterProductsDTO filter);
         Task<Product> GetProductById(long productId);
+        Task<List<Product>> GetRelatedProducts(long productId);
 
         #endregion
 

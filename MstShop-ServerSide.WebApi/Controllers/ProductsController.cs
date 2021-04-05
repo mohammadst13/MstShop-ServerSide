@@ -58,5 +58,17 @@ namespace MstShop_ServerSide.WebApi.Controllers
         }
 
         #endregion
+
+        #region related products
+
+        [HttpGet("related-products/{id}")]
+        public async Task<IActionResult> GetRelatedProducts(long id)
+        {
+            var relatedProducts = await productService.GetRelatedProducts(id);
+
+            return JsonResponseStatus.Success(relatedProducts);
+        }
+
+        #endregion
     }
 }
