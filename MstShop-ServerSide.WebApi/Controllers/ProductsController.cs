@@ -49,9 +49,10 @@ namespace MstShop_ServerSide.WebApi.Controllers
         public async Task<IActionResult> GetProduct(long id)
         {
             var product = await productService.GetProductById(id);
+            var productGalleries = await productService.GetProductActiveGalleries(id);
 
             if (product != null)
-                return JsonResponseStatus.Success(product);
+                return JsonResponseStatus.Success(new { product = product, galleries = productGalleries });
 
             return JsonResponseStatus.NotFound();
         }

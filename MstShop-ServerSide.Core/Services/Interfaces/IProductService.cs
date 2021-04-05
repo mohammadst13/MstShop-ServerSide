@@ -22,5 +22,11 @@ namespace MstShop_ServerSide.Core.Services.Interfaces
         Task<List<ProductCategory>> GetAllActiveProductCategories();
 
         #endregion
+
+        #region proudct gallery
+
+        Task<List<ProductGallery>> GetProductActiveGalleries(long productId);
+
+        #endregion
     }
 }
