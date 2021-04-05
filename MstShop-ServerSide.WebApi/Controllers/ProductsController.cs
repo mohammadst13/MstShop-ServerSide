@@ -42,5 +42,20 @@ namespace MstShop_ServerSide.WebApi.Controllers
         }
 
         #endregion
+
+        #region get single product
+
+        [HttpGet("single-product/{id}")]
+        public async Task<IActionResult> GetProduct(long id)
+        {
+            var product = await productService.GetProductById(id);
+
+            if (product != null)
+                return JsonResponseStatus.Success(product);
+
+            return JsonResponseStatus.NotFound();
+        }
+
+        #endregion
     }
 }

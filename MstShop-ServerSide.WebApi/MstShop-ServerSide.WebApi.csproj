@@ -21,4 +21,8 @@
     <ProjectReference Include="..\MstShop-ServerSide.DataLayer\MstShop-ServerSide.DataLayer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\products\origin\" />
+  </ItemGroup>
+
 </Project>
