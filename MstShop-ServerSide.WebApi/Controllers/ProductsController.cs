@@ -70,5 +70,17 @@ namespace MstShop_ServerSide.WebApi.Controllers
         }
 
         #endregion
+
+        #region product comments
+
+        [HttpGet("product-comments/{id}")]
+        public async Task<IActionResult> GetProductComments(long id)
+        {
+            var comments = await productService.GetActiveProductComments(id);
+
+            return JsonResponseStatus.Success(comments);
+        }
+
+        #endregion
     }
 }

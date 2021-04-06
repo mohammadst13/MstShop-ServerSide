@@ -21,14 +21,21 @@ namespace AngularEshop.Core.Services.Implementations
         private IGenericRepository<ProductGallery> productGalleryRepository;
         private IGenericRepository<ProductSelectedCategory> productSelectedCategoryRepository;
         private IGenericRepository<ProductVisit> productVisitRepository;
+        private IGenericRepository<ProductComment> productCommentRepository;
 
-        public ProductService(IGenericRepository<Product> productRepository, IGenericRepository<ProductCategory> productCategoryRepository, IGenericRepository<ProductGallery> productGalleryRepository, IGenericRepository<ProductSelectedCategory> productSelectedCategoryRepository, IGenericRepository<ProductVisit> productVisitRepository)
+        public ProductService(IGenericRepository<Product> productRepository,
+            IGenericRepository<ProductCategory> productCategoryRepository,
+            IGenericRepository<ProductGallery> productGalleryRepository,
+            IGenericRepository<ProductSelectedCategory> productSelectedCategoryRepository,
+            IGenericRepository<ProductVisit> productVisitRepository,
+            IGenericRepository<ProductComment> productCommentRepository)
         {
             this.productRepository = productRepository;
             this.productCategoryRepository = productCategoryRepository;
             this.productGalleryRepository = productGalleryRepository;
             this.productSelectedCategoryRepository = productSelectedCategoryRepository;
             this.productVisitRepository = productVisitRepository;
+            this.productCommentRepository = productCommentRepository;
         }
 
         #endregion
@@ -141,6 +148,33 @@ namespace AngularEshop.Core.Services.Implementations
 
         #endregion
 
+        #region product comments
+
+        public async Task AddCommentToProduct(ProductComment comment)
+        {
+            await productCommentRepository.AddEntity(comment);
+            await productCommentRepository.SaveChanges();
+        }
+
+        public async Task<List<ProductCommentDTO>> GetActiveProductComments(long productId)
+        {
+            return await productCommentRepository
+                .GetEntitiesQuery()
+                .Include(s => s.User)
+                .Where(c => c.ProductId == productId && !c.IsDelete)
+                .OrderByDescending(s => s.CreateDate)
+                .Select(s => new ProductCommentDTO
+                {
+                    Id = s.Id,
+                    Text = s.Text,
+                    UserId = s.UserId,
+                    UserFullName = s.User.FirstName + " " + s.User.LastName,
+                    CreateDate = s.CreateDate.ToString("yyyy/MM/dd HH:mm")
+                }).ToListAsync();
+        }
+
+        #endregion
+
         #region dispose
 
         public void Dispose()
@@ -150,6 +184,7 @@ namespace AngularEshop.Core.Services.Implementations
             productGalleryRepository?.Dispose();
             productSelectedCategoryRepository?.Dispose();
             productVisitRepository?.Dispose();
+            productCommentRepository?.Dispose();
         }
 
         #endregion

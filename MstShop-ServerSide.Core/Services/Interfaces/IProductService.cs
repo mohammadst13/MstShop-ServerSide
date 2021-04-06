@@ -29,5 +29,12 @@ namespace MstShop_ServerSide.Core.Services.Interfaces
         Task<List<ProductGallery>> GetProductActiveGalleries(long productId);
 
         #endregion
+
+        #region product comments
+
+        Task AddCommentToProduct(ProductComment comment);
+        Task<List<ProductCommentDTO>> GetActiveProductComments(long productId);
+
+        #endregion
     }
 }

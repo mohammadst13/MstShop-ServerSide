@@ -1,6 +1,7 @@
 ﻿using DocumentFormat.OpenXml.Wordprocessing;
 using MstShop_ServerSide.DataLayer.Entities.Access;
 using MstShop_ServerSide.DataLayer.Entities.Common;
+using MstShop_ServerSide.DataLayer.Entities.Product;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -47,6 +48,8 @@ namespace MstShop_ServerSide.DataLayer.Entities.Account
         #region Relations
 
         public ICollection<UserRole> UserRoles { get; set; }
+
+        public ICollection<ProductComment> ProductComments { get; set; }
 
         #endregion
     }

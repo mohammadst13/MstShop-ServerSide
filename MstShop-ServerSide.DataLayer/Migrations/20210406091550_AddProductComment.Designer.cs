@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MstShop_ServerSide.DataLayer.Context;
 
 namespace MstShop_ServerSide.DataLayer.Migrations
 {
     [DbContext(typeof(MstShopDbContext))]
-    partial class MstShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210406091550_AddProductComment")]
+    partial class AddProductComment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
