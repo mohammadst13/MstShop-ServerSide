@@ -2,6 +2,7 @@
 using MstShop_ServerSide.Core.DTOs.Products;
 using MstShop_ServerSide.Core.Services.Interfaces;
 using MstShop_ServerSide.Core.Utilities.Common;
+using MstShop_ServerSide.Core.Utilities.Extensions.Identity;
 using System.Threading.Tasks;
 
 namespace MstShop_ServerSide.WebApi.Controllers
@@ -73,6 +74,8 @@ namespace MstShop_ServerSide.WebApi.Controllers
 
         #region product comments
 
+        #region list
+
         [HttpGet("product-comments/{id}")]
         public async Task<IActionResult> GetProductComments(long id)
         {
@@ -80,6 +83,28 @@ namespace MstShop_ServerSide.WebApi.Controllers
 
             return JsonResponseStatus.Success(comments);
         }
+
+        #endregion
+
+        #region add
+
+        [HttpPost("add-product-comment")]
+        public async Task<IActionResult> AddProductComponent([FromBody] AddProductCommentDTO comment)
+        {
+            if (!User.Identity.IsAuthenticated)
+                return JsonResponseStatus.Error(new { message = "لطفا ابتدا وارد سایت شوید" });
+
+            if (!await productService.IsExistsProductById(comment.ProductId))
+                return JsonResponseStatus.NotFound();
+
+            var userId = User.GetUserId();
+
+            var res = await productService.AddProductComment(comment, userId);
+
+            return JsonResponseStatus.Success(res);
+        }
+
+        #endregion
 
         #endregion
     }

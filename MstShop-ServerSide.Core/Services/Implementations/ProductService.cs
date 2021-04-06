@@ -119,6 +119,11 @@ namespace AngularEshop.Core.Services.Implementations
             return relatedProducts;
         }
 
+        public async Task<bool> IsExistsProductById(long productId)
+        {
+            return await productRepository.GetEntitiesQuery().AnyAsync(s => s.Id == productId);
+        }
+
         #endregion
 
         #region product categories
@@ -171,6 +176,29 @@ namespace AngularEshop.Core.Services.Implementations
                     UserFullName = s.User.FirstName + " " + s.User.LastName,
                     CreateDate = s.CreateDate.ToString("yyyy/MM/dd HH:mm")
                 }).ToListAsync();
+        }
+
+        public async Task<ProductCommentDTO> AddProductComment(AddProductCommentDTO comment, long userId)
+        {
+            var commentData = new ProductComment
+            {
+                ProductId = comment.ProductId,
+                Text = comment.Text,
+                UserId = userId
+            };
+
+            await productCommentRepository.AddEntity(commentData);
+
+            await productCommentRepository.SaveChanges();
+
+            return new ProductCommentDTO
+            {
+                Id = commentData.Id,
+                CreateDate = commentData.CreateDate.ToString("yyyy/MM/dd HH:mm"),
+                Text = commentData.Text,
+                UserId = userId,
+                UserFullName = ""
+            };
         }
 
         #endregion

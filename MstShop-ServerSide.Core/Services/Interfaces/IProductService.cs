@@ -15,6 +15,7 @@ namespace MstShop_ServerSide.Core.Services.Interfaces
         Task<FilterProductsDTO> FilterProducts(FilterProductsDTO filter);
         Task<Product> GetProductById(long productId);
         Task<List<Product>> GetRelatedProducts(long productId);
+        Task<bool> IsExistsProductById(long productId);
 
         #endregion
 
@@ -34,6 +35,7 @@ namespace MstShop_ServerSide.Core.Services.Interfaces
 
         Task AddCommentToProduct(ProductComment comment);
         Task<List<ProductCommentDTO>> GetActiveProductComments(long productId);
+        Task<ProductCommentDTO> AddProductComment(AddProductCommentDTO comment, long userId);
 
         #endregion
     }

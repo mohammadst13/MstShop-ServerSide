@@ -12,4 +12,11 @@
 
         public string Text { get; set; }
     }
+
+    public enum AddProductCommentResult
+    {
+        Success,
+        NotFoundProduct,
+        Error
+    }
 }
