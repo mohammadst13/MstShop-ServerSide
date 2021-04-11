@@ -124,6 +124,12 @@ namespace AngularEshop.Core.Services.Implementations
             return await productRepository.GetEntitiesQuery().AnyAsync(s => s.Id == productId);
         }
 
+        public async Task<Product> GetProductForUserOrder(long productId)
+        {
+            return await productRepository.GetEntitiesQuery()
+                .SingleOrDefaultAsync(s => s.Id == productId && !s.IsDelete);
+        }
+
         #endregion
 
         #region product categories

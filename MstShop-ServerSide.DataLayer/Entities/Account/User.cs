@@ -1,6 +1,7 @@
 ﻿using DocumentFormat.OpenXml.Wordprocessing;
 using MstShop_ServerSide.DataLayer.Entities.Access;
 using MstShop_ServerSide.DataLayer.Entities.Common;
+using MstShop_ServerSide.DataLayer.Entities.Orders;
 using MstShop_ServerSide.DataLayer.Entities.Product;
 using System;
 using System.Collections.Generic;
@@ -50,6 +51,7 @@ namespace MstShop_ServerSide.DataLayer.Entities.Account
         public ICollection<UserRole> UserRoles { get; set; }
 
         public ICollection<ProductComment> ProductComments { get; set; }
+        public ICollection<Order> Orders { get; set; }
 
         #endregion
     }

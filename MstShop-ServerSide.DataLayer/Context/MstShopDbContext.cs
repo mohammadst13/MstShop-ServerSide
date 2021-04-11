@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MstShop_ServerSide.DataLayer.Entities.Access;
 using MstShop_ServerSide.DataLayer.Entities.Account;
+using MstShop_ServerSide.DataLayer.Entities.Orders;
 using MstShop_ServerSide.DataLayer.Entities.Product;
 using MstShop_ServerSide.DataLayer.Entities.Site;
 using System;
@@ -40,6 +41,10 @@ namespace MstShop_ServerSide.DataLayer.Context
         public DbSet<ProductSelectedCategory> ProductSelectedCategories { get; set; }
 
         public DbSet<ProductVisit> ProductVisits { get; set; }
+
+        public DbSet<Order> Orders { get; set; }
+
+        public DbSet<OrderDetail> OrderDetails { get; set; }
 
         #endregion
 

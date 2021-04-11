@@ -16,6 +16,7 @@ namespace MstShop_ServerSide.Core.Services.Interfaces
         Task<Product> GetProductById(long productId);
         Task<List<Product>> GetRelatedProducts(long productId);
         Task<bool> IsExistsProductById(long productId);
+        Task<Product> GetProductForUserOrder(long productId);
 
         #endregion
 
