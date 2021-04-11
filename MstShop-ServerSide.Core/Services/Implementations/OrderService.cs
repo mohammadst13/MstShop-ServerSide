@@ -4,6 +4,7 @@ using MstShop_ServerSide.DataLayer.Entities.Orders;
 using MstShop_ServerSide.DataLayer.Repository;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -67,17 +68,37 @@ namespace MstShop_ServerSide.Core.Services.Implementations
             {
                 var order = await GetUserOpenOrder(userId);
 
-                var detail = new OrderDetail
-                {
-                    OrderId = order.Id,
-                    ProductId = productId,
-                    Count = count,
-                    Price = product.Price
-                };
+                if (count < 1) count = 1;
 
-                await _orderDetailRepository.AddEntity(detail);
+
+                var details = await GetOrderDetails(order.Id);
+
+                var existsDetail = details.SingleOrDefault(s => s.ProductId == productId);
+
+                if (existsDetail != null)
+                {
+                    existsDetail.Count += count;
+                    _orderDetailRepository.UpdateEntity(existsDetail);
+                }
+                else
+                {
+                    var detail = new OrderDetail
+                    {
+                        OrderId = order.Id,
+                        ProductId = productId,
+                        Count = count,
+                        Price = product.Price
+                    };
+                    await _orderDetailRepository.AddEntity(detail);
+                }
+
                 await _orderDetailRepository.SaveChanges();
             }
+        }
+
+        public async Task<List<OrderDetail>> GetOrderDetails(long orderId)
+        {
+            return await _orderDetailRepository.GetEntitiesQuery().Where(s => s.OrderId == orderId).ToListAsync();
         }
 
         #endregion

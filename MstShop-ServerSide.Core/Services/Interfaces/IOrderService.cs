@@ -18,6 +18,7 @@ namespace MstShop_ServerSide.Core.Services.Interfaces
         #region order detail
 
         Task AddProductToOrder(long userId, long productId, int count);
+        Task<List<OrderDetail>> GetOrderDetails(long orderId);
 
         #endregion
     }

@@ -53,6 +53,7 @@ namespace MstShop_ServerSide.WebApi
             services.AddScoped<ISliderService, SliderService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IPasswordHelper, PasswordHelper>();
+            services.AddScoped<IOrderService, OrderService>();
             //services.AddScoped<IMailSender, SendEmail>();
             //services.AddScoped<IViewRenderService, RenderViewToString>();
 
