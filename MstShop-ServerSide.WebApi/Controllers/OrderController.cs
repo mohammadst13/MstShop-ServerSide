@@ -28,10 +28,30 @@ namespace MstShop_ServerSide.WebApi.Controllers
             {
                 var userId = User.GetUserId();
                 await _orderService.AddProductToOrder(userId, productId, count);
-                return JsonResponseStatus.Success(new { message = "محصول با موفقیت به سبد خرید شما اضافه شد" });
+                return JsonResponseStatus.Success(new
+                {
+                    message = "محصول با موفقیت به سبد خرید شما اضافه شد",
+                    details = await _orderService.GetUserBasketDetails(userId)
+                });
             }
 
             return JsonResponseStatus.Error(new { message = "برای افزودن محصول به سبد خرید ، ابتدا لاگین کنید" });
+        }
+
+        #endregion
+
+        #region user basket details
+
+        [HttpGet("get-order-details")]
+        public async Task<IActionResult> GetUserBasketDetails()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var details = await _orderService.GetUserBasketDetails(User.GetUserId());
+                return JsonResponseStatus.Success(details);
+            }
+
+            return JsonResponseStatus.Error();
         }
 
         #endregion

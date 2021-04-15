@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MstShop_ServerSide.Core.DTOs.Orders;
 using MstShop_ServerSide.Core.Services.Interfaces;
+using MstShop_ServerSide.Core.Utilities.Common;
 using MstShop_ServerSide.DataLayer.Entities.Orders;
 using MstShop_ServerSide.DataLayer.Repository;
 using System;
@@ -46,13 +48,17 @@ namespace MstShop_ServerSide.Core.Services.Implementations
 
         public async Task<Order> GetUserOpenOrder(long userId)
         {
-            var order = await _orderRepository.GetEntitiesQuery()
-                .SingleOrDefaultAsync(s => s.UserId == userId && !s.IsPay && !s.IsDelete);
+            {
+                var order = await _orderRepository.GetEntitiesQuery()
+                    .Include(s => s.OrderDetails)
+                    .ThenInclude(s => s.Product)
+                    .SingleOrDefaultAsync(s => s.UserId == userId && !s.IsPay && !s.IsDelete);
 
-            if (order == null)
-                order = await CreateUserOrder(userId);
+                if (order == null)
+                    order = await CreateUserOrder(userId);
 
-            return order;
+                return order;
+            }
         }
 
         #endregion
@@ -99,6 +105,21 @@ namespace MstShop_ServerSide.Core.Services.Implementations
         public async Task<List<OrderDetail>> GetOrderDetails(long orderId)
         {
             return await _orderDetailRepository.GetEntitiesQuery().Where(s => s.OrderId == orderId).ToListAsync();
+        }
+
+        public async Task<List<OrderBasketDetail>> GetUserBasketDetails(long userId)
+        {
+            var openOrder = await GetUserOpenOrder(userId);
+
+            if (openOrder == null) return null;
+
+            return openOrder.OrderDetails.Select(f => new OrderBasketDetail
+            {
+                Count = f.Count,
+                Price = f.Price,
+                Title = f.Product.ProductName,
+                ImageName = PathTools.Domain + PathTools.ProductImagePath + f.Product.ImageName
+            }).ToList();
         }
 
         #endregion
