@@ -79,7 +79,7 @@ namespace MstShop_ServerSide.Core.Services.Implementations
 
                 var details = await GetOrderDetails(order.Id);
 
-                var existsDetail = details.SingleOrDefault(s => s.ProductId == productId);
+                var existsDetail = details.SingleOrDefault(s => s.ProductId == productId && !s.IsDelete);
 
                 if (existsDetail != null)
                 {
@@ -113,13 +113,20 @@ namespace MstShop_ServerSide.Core.Services.Implementations
 
             if (openOrder == null) return null;
 
-            return openOrder.OrderDetails.Select(f => new OrderBasketDetail
+            return openOrder.OrderDetails.Where(s => !s.IsDelete).Select(f => new OrderBasketDetail
             {
+                Id = f.Id,
                 Count = f.Count,
                 Price = f.Price,
                 Title = f.Product.ProductName,
                 ImageName = PathTools.Domain + PathTools.ProductImagePath + f.Product.ImageName
             }).ToList();
+        }
+
+        public async Task DeleteOrderDetail(OrderDetail detail)
+        {
+            _orderDetailRepository.RemoveEntity(detail);
+            await _orderDetailRepository.SaveChanges();
         }
 
         #endregion

@@ -2,6 +2,7 @@
 using MstShop_ServerSide.Core.Services.Interfaces;
 using MstShop_ServerSide.Core.Utilities.Common;
 using MstShop_ServerSide.Core.Utilities.Extensions.Identity;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MstShop_ServerSide.WebApi.Controllers
@@ -49,6 +50,27 @@ namespace MstShop_ServerSide.WebApi.Controllers
             {
                 var details = await _orderService.GetUserBasketDetails(User.GetUserId());
                 return JsonResponseStatus.Success(details);
+            }
+
+            return JsonResponseStatus.Error();
+        }
+
+        #endregion
+
+        #region remove order detail from basket
+
+        [HttpGet("remove-order-detail/{detailId}")]
+        public async Task<IActionResult> RemoveOrderDetail(int detailId)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var userOpenOrder = await _orderService.GetUserOpenOrder(User.GetUserId());
+                var detail = userOpenOrder.OrderDetails.SingleOrDefault(s => s.Id == detailId);
+                if (detail != null)
+                {
+                    await _orderService.DeleteOrderDetail(detail);
+                    return JsonResponseStatus.Success(await _orderService.GetUserBasketDetails(User.GetUserId()));
+                }
             }
 
             return JsonResponseStatus.Error();
